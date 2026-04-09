@@ -63,21 +63,47 @@ ph_surveillance_analytics_smp/
 
 This pipeline illustrates the transformation of synthetic ED visit data into weekly surveillance indicators, anomaly signals, and epidemiologic visualizations through a modular, orchestrated workflow.
 
-flowchart TD
-    A[generate_synthetic_data.py<br/>Synthetic ED Visits]
-    B[data/ed_visits.csv]
-    C[classify_syndromes.py<br/>ILI / CLI / RSV Flags]
-    D[weekly_aggregation.py<br/>Weekly Counts & Rates]
-    E[anomaly_detection.py<br/>Rolling Baselines & Flags]
-    F[outputs/anomaly_flags.csv]
-    G[plot_surveillance_trends.py<br/>Time Series Visualization]
-    H[outputs/ili_weekly_trend.png]
-
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    E --> F
-    E --> G
-    G --> H
+┌──────────────────────────────┐
+│ generate_synthetic_data.py   │
+│ - create synthetic ED visits │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│ data/ed_visits.csv           │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│ classify_syndromes.py        │
+│ - ILI / CLI / RSV flags      │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│ weekly_aggregation.py        │
+│ - weekly counts              │
+│ - incidence rates            │
+└──────────────┬───────────────┘
+               │
+               ▼
+┌──────────────────────────────┐
+│ anomaly_detection.py         │
+│ - rolling baselines          │
+│ - anomaly flags              │
+└──────────────┬───────────────┘
+               │
+     ┌─────────┴─────────┐
+     ▼                   ▼
+┌───────────────┐  ┌────────────────────┐
+│ anomaly_flags │  │ plot_surveillance  │
+│ .csv          │  │ _trends.py          │
+└───────────────┘  │ - time series plot  │
+                   └──────────┬─────────┘
+                              │
+                              ▼
+                   ┌────────────────────┐
+                   │ outputs/ili_weekly │
+                   │ _trend.png         │
+                   └────────────────────┘
 ``
