@@ -1,0 +1,78 @@
+WITH baselines AS (
+    SELECT
+        week,
+        county,
+        age_group,
+
+        ili_rate,
+        cli_rate,
+        rsv_rate,
+
+        -- Rolling 4-week baselines (prior weeks only)
+        AVG(ili_rate) OVER (
+            PARTITION BY county, age_group
+            ORDER BY week
+            ROWS BETWEEN 4 PRECEDING AND 1 PRECEDING
+        ) AS ili_baseline_rate,
+
+        AVG(cli_rate) OVER (
+            PARTITION BY county, age_group
+            ORDER BY week
+            ROWS BETWEEN 4 PRECEDING AND 1 PRECEDING
+        ) AS cli_baseline_rate,
+
+        AVG(rsv_rate) OVER (
+            PARTITION BY county, age_group
+            ORDER BY week
+            ROWS BETWEEN 4 PRECEDING AND 1 PRECEDING
+        ) AS rsv_baseline_rate
+
+    FROM weekly_incidence_rates
+),
+
+signals AS (
+    SELECT
+        *,
+        -- Percent change calculations
+        (ili_rate - ili_baseline_rate) / ili_baseline_rate AS ili_pct_change,
+        (cli_rate - cli_baseline_rate) / cli_baseline_rate AS cli_pct_change,
+        (rsv_rate - rsv_baseline_rate) / rsv_baseline_rate AS rsv_pct_change
+
+    FROM baselines
+)
+
+SELECT
+    week,
+    county,
+    age_group,
+
+    ili_rate,
+    ili_baseline_rate,
+    ili_pct_change,
+    CASE
+        WHEN ili_baseline_rate > 0
+         AND ili_pct_change >= 0.50
+        THEN 1 ELSE 0
+    END AS ili_signal_flag,
+
+    cli_rate,
+    cli_baseline_rate,
+    cli_pct_change,
+    CASE
+        WHEN cli_baseline_rate > 0
+         AND cli_pct_change >= 0.50
+        THEN 1 ELSE 0
+    END AS cli_signal_flag,
+
+    rsv_rate,
+    rsv_baseline_rate,
+    rsv_pct_change,
+    CASE
+        WHEN rsv_baseline_rate > 0
+         AND rsv_pct_change >= 0.50
+        THEN 1 ELSE 0
+    END AS rsv_signal_flag
+
+FROM signals
+ORDER BY county, age_group, week;
+

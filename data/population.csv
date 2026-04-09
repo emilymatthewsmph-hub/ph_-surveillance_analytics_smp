@@ -1,0 +1,10 @@
+county,age_group,population
+CountyA,0-17,50000
+CountyA,18-64,120000
+CountyA,65+,30000
+CountyB,0-17,40000
+CountyB,18-64,90000
+CountyB,65+,25000
+CountyC,0-17,30000
+CountyC,18-64,80000
+CountyC,65+,20000
