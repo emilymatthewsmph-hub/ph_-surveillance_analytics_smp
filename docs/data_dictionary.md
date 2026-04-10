@@ -3,25 +3,33 @@
 This document describes the structure and meaning of all datasets used or produced by the respiratory surveillance analytics pipeline. It is intended to support transparency, reproducibility, and auditability.
 
 # 1. Input Datasets
+
 1.1 ed_visits.csv — Synthetic Emergency Department Visits
-Column	Type	Description
-visit_id	Integer	Unique identifier for each ED encounter.
-patient_id	Integer	Synthetic patient identifier; may appear in multiple visits.
-age	Integer	Patient age in years.
-sex	String	Patient sex (“M” or “F”).
-county	String	County where the visit occurred (CountyA, CountyB, CountyC).
-chief_complaint	String	Free‑text presenting symptoms.
-diagnosis_code	String	ICD‑10 code assigned at discharge.
-visit_date	Date	Date of ED encounter.
+
+ |Column |Type |Description |
+ |------------|-------------|
+|visit_id|	Integer|	Unique identifier for each ED encounter|
+|patient_id| Integer|	Synthetic patient identifier; may appear in multiple visits|
+|age|	Integer|	Patient age in years|
+|sex|	String|	Patient sex (“M” or “F”)|
+|county|	String|	County where the visit occurred (CountyA, CountyB, CountyC)|
+|chief_complaint|	String|Free‑text presenting symptoms|
+|diagnosis_code |	String |	ICD‑10 code assigned at discharge|
+|visit_date|	Date|	Date of ED encounter|
+
 1.2 population.csv — Population Denominators
-Column	Type	Description
+
+ |Column |Type |Description |
+|------------|-------------|
 county	String	County name.
 age_group	String	Age category (0‑17, 18‑64, 65+).
 population	Integer	Population count for the county/age group.
+
 1.3 lab_results.csv — Optional Synthetic Lab Data
 (Not used in the core pipeline but included for future enhancements.)
 
-Column	Type	Description
+|Column |Type |Description |
+|------------|-------------|
 patient_id	Integer	Synthetic patient identifier.
 test_type	String	Test modality (PCR, antigen).
 pathogen	String	Pathogen tested (Flu A, RSV, SARS‑CoV‑2).
@@ -30,7 +38,9 @@ collection_date	Date	Date specimen was collected.
 
 # 2. Intermediate Outputs
 2.1 ed_visits_classified.csv — Syndrome‑Flagged ED Visits
-Column	Type	Description
+
+|Column |Type |Description |
+|------------|-------------|
 ili_flag	Boolean	True if ICD‑10 code indicates ILI.
 cli_flag	Boolean	True if ICD‑10 code indicates CLI.
 rsv_flag	Boolean	True if ICD‑10 code indicates RSV‑like illness.
@@ -40,7 +50,9 @@ week	Date	ISO week start date.
 
 # 3. Final Outputs
 3.1 weekly_syndrome_counts.csv
-Column	Type	Description
+
+|Column |Type |Description |
+|------------|-------------|
 week	Date	Week start date.
 county	String	County name.
 age_group	String	Age category.
@@ -56,7 +68,8 @@ rsv_rate	Float	RSV‑like incidence per 100,000 population.
 (Includes all columns from weekly_syndrome_counts.csv.)
 
 3.3 weekly_surveillance_signals.csv
-Column	Type	Description
+|Column |Type |Description |
+|------------|-------------|
 ili_baseline_rate	Float	Rolling 4‑week baseline for ILI.
 ili_pct_change	Float	Percent change from baseline.
 ili_signal_flag	Integer	1 if signal criteria met.
