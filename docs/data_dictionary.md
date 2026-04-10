@@ -21,20 +21,20 @@ This document describes the structure and meaning of all datasets used or produc
 
  | Column | Type | Description |
  |---------|-----|------------|
-county	String	County name.
-age_group	String	Age category (0‑17, 18‑64, 65+).
-population	Integer	Population count for the county/age group.
+| county|	String	| County name|
+| age_group |	String |	Age category (0‑17, 18‑64, 65+)|
+| population |	Integer |	Population count for the county/age group|
 
 1.3 lab_results.csv — Optional Synthetic Lab Data
 (Not used in the core pipeline but included for future enhancements.)
 
  | Column | Type | Description |
  |---------|-----|------------|
-patient_id	Integer	Synthetic patient identifier.
-test_type	String	Test modality (PCR, antigen).
-pathogen	String	Pathogen tested (Flu A, RSV, SARS‑CoV‑2).
-result	String	Test result (“positive” or “negative”).
-collection_date	Date	Date specimen was collected.
+| patient_id |	Integer|	Synthetic patient identifier|
+| test_type |	String |	Test modality (PCR, antigen)|
+| pathogen |	String |	Pathogen tested (Flu A, RSV, SARS‑CoV‑2)|
+| result |	String |	Test result (“positive” or “negative”) |
+| collection_date |	Date |	Date specimen was collected |
 
 # 2. Intermediate Outputs
 2.1 ed_visits_classified.csv — Syndrome‑Flagged ED Visits
