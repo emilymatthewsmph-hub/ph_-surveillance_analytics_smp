@@ -1,4 +1,4 @@
-### Technical Appendix
+# Technical Appendix
 This appendix provides detailed information on the analytic logic, data transformations, and computational methods used throughout the respiratory surveillance analytics pipeline. It is intended to support transparency, reproducibility, and auditability in public health surveillance workflows.
 
 
@@ -6,7 +6,7 @@ This appendix provides detailed information on the analytic logic, data transfor
 
 The analytic pipeline follows a modular design pattern common in public health analytics:
 
-# 1. Data generation
+### 1. Data generation
    Synthetic ED visit data is generated using controlled randomization to simulate realistic distributions of:
 
 Age (0–89 years)
@@ -23,7 +23,7 @@ Visit dates across the 2024 calendar year
 
 Random seeds ensure reproducibility.
 
-# 2. Syndrome classification
+### 2. Syndrome classification
 Syndrome flags are assigned using simplified ICD‑10 definitions:
 
  | Column | Type | Description |
@@ -34,7 +34,7 @@ Syndrome flags are assigned using simplified ICD‑10 definitions:
 | RSV-like | J21 | RSV-associated bronchiolitis |
 Flags are Boolean and non-exclusive. 
 
-# 3. Weekly aggregation
+### 3. Weekly aggregation
 Weekly indicators are computed using:
 
 ISO week start dates (Period('W'))
@@ -53,7 +53,7 @@ Age groups are derived using:
 
 65+
 
-# 4. Incidence rate calculation
+### 4. Incidence rate calculation
 Incidence rates per 100,000 population are computed as:
 
 rate
@@ -65,7 +65,7 @@ population
 
 Population denominators are static and sourced from population.csv.
 
-# 5. Surveillance Signal Detection Logic
+### 5. Surveillance Signal Detection Logic
 Signal detection uses:
 
 Rolling 4‑week baselines
@@ -84,6 +84,7 @@ current_rate
 −
 baseline
 baseline
+
 Signal flag:
 
 signal
@@ -94,7 +95,7 @@ if baseline > 0 and pct_change ≥ 0.50
 0
 otherwise
 
-# 6. Visualization
+### 6. Visualization
 
 Each analytic step reads inputs from disk and writes outputs to disk to ensure traceability and reproducibility.
 Visualizations use:
@@ -115,7 +116,8 @@ Time-series plots are generated using a non-interactive backend suitable for ser
 
 Execution order is enforced through a lightweight orchestration script (`run_pipeline.py`). The orchestration layer coordinates execution but contains no analytic logic.
 
-# Reproducibility Considerations
+### Reproducibility Considerations
+
 All scripts use explicit file paths.
 
 Random seeds ensure deterministic synthetic data.
