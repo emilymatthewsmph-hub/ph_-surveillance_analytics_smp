@@ -2,7 +2,7 @@
 
 This project is designed as a demonstration of respiratory syndromic surveillance analytics and intentionally simplifies several aspects of real‑world surveillance systems. The following limitations should be considered when interpreting results.
 
-#Data Limitations
+# Data Limitations
 All ED visit data is synthetic and does not reflect real patient encounters.
 
 Diagnosis codes are randomly assigned and do not follow clinical patterns.
@@ -11,7 +11,7 @@ Chief complaints are not used in syndrome classification, though they are import
 
 No hospital‑level variation or facility reporting patterns are modeled.
 
-#Methodological Limitations
+# Methodological Limitations
 Syndrome definitions rely solely on ICD‑10 codes.
 
 No natural seasonality (e.g., influenza peaks) is present in the synthetic data.
@@ -20,14 +20,14 @@ Rolling baselines do not incorporate smoothing, trend adjustment, or seasonality
 
 Percent change thresholds are simplified and not calibrated to real surveillance systems.
 
-#Statistical Limitations
+# Statistical Limitations
 No confidence intervals or uncertainty estimates are included.
 
 No spatial smoothing or Bayesian modeling is applied.
 
 No adjustment for multiple comparisons across counties or age groups.
 
-#Operational Limitations
+# Operational Limitations
 The pipeline does not include automated data ingestion or ETL processes.
 
 No alerting or notification system is implemented.
@@ -36,7 +36,7 @@ SQL scripts assume a warehouse environment but do not include optimization strat
 
 Visualization is limited to a single syndrome, county, and age group.
 
-#Scope Limitations
+# Scope Limitations
 The project is not intended for real‑world public health decision‑making.
 
 Outputs should not be interpreted as epidemiologic findings.
