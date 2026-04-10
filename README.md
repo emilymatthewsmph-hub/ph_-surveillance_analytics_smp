@@ -1,9 +1,223 @@
-## Project Overview
+### Public Health Respiratory Surveillance Analytics (Syndromic Surveillance Sample Project)
+This repository demonstrates an end‑to‑end respiratory syndromic surveillance pipeline modeled after analytic workflows used by CDC, state health departments, and federal public health contractors. The project ingests synthetic emergency department (ED) visit data, classifies respiratory syndromes, aggregates weekly indicators, calculates incidence rates, and detects surveillance signals using rule‑based anomaly logic. Equivalent SQL scripts reproduce the same indicators for warehouse‑based environments.
 
-This repository contains a self‑contained **public health syndromic surveillance analytics sample** designed to reflect workflows used by the CDC, state health departments, and HHS‑supported surveillance programs. The project demonstrates how emergency department (ED) visit data can be transformed into standardized surveillance indicators and anomaly signals to support situational awareness.
+The project is designed to showcase both epidemiologic reasoning and data engineering rigor, using modular Python scripts, reproducible data transformations, and transparent analytic logic.
 
-All data used in this project are fully synthetic and contain no protected health information (PHI).
+## Project Objectives
+This project implements a complete surveillance workflow that:
 
+Generates synthetic ED visit data for respiratory illness monitoring
+
+Classifies visits into ILI, CLI, and RSV‑like syndromes
+
+Aggregates weekly counts and incidence rates
+
+Computes rolling baselines and percent change
+
+Flags surveillance signals requiring epidemiologic review
+
+Reproduces the same logic in SQL for warehouse environments
+
+Produces a CDC‑style epidemiologic trend visualization
+
+##Key Features
+Synthetic ED data generation (Python)
+
+Syndrome classification using ICD‑10 codes
+
+Weekly aggregation by county and age group
+
+Incidence rate calculation using population denominators
+
+Surveillance signal detection using rolling 4‑week baselines
+
+SQL parity for warehouse‑based analytics
+
+Visualization of weekly ILI trends
+
+Modular, reproducible pipeline with clear folder structure
+
+## Project Architecture
+The surveillance pipeline follows a layered architecture similar to CDC NSSP and state surveillance systems.
+
+Code
+                +---------------------------+
+                |   Synthetic ED Data       |
+                |   (ed_visits.csv)         |
+                +-------------+-------------+
+                              |
+                              v
+                +---------------------------+
+                |   Syndrome Classification |
+                |   (ILI / CLI / RSV)       |
+                +-------------+-------------+
+                              |
+                              v
+                +---------------------------+
+                |   Weekly Aggregation      |
+                |   Counts + Rates          |
+                +-------------+-------------+
+                              |
+                              v
+                +---------------------------+
+                |   Surveillance Signals    |
+                |   Baseline + % Change     |
+                +-------------+-------------+
+                              |
+                              v
+                +---------------------------+
+                |   Visualization Output    |
+                |   (ILI Trend Plot)        |
+                +---------------------------+
+
+# mermaid
+flowchart TD
+    A[Generate Synthetic ED Data<br>generate_synthetic_data.py] --> B[Classify Syndromes<br>classify_syndromes.py]
+    B --> C[Weekly Aggregation<br>weekly_aggregation.py]
+    C --> D[Incidence Rates<br>weekly_incidence_rates.csv]
+    D --> E[Surveillance Signals<br>surveillance_signals.py]
+    E --> F[Visualization<br>plot_surveillance_trends.py]
+## Repository Structure
+Code
+ph_surveillance_analytics_smp/
+│
+├── data/
+│   ├── ed_visits.csv
+│   ├── population.csv
+│   └── lab_results.csv
+│
+├── outputs/
+│   ├── weekly_syndrome_counts.csv
+│   ├── weekly_incidence_rates.csv
+│   ├── weekly_surveillance_signals.csv
+│   └── ili_weekly_trend.png
+│
+├── src/
+│   ├── generate_synthetic_data.py
+│   ├── classify_syndromes.py
+│   ├── weekly_aggregation.py
+│   ├── surveillance_signals.py
+│   ├── plot_surveillance_trends.py
+│   └── run_pipeline.py
+│
+├── sql/
+│   ├── syndrome_classification.sql
+│   ├── weekly_aggregation.sql
+│   └── incidence_and_surveillance_signals.sql
+│
+└── docs/
+    ├── assumptions.md
+    ├── data_dictionary.md
+    ├── technical_appendix.md
+    ├── limitations.md
+    ├── future_enhancements.md
+    └── portfolio_summary.md
+## Methods Overview
+1. Synthetic ED Data Generation
+Creates 5,000 synthetic ED visits with:
+
+Age, sex, county
+
+Chief complaint
+
+ICD‑10 diagnosis code
+
+Visit date
+
+2. Syndrome Classification
+Flags visits as:
+
+ILI (J10, J11)
+
+CLI (U07.1)
+
+RSV‑like (J21)
+
+3. Weekly Aggregation
+Groups by:
+
+Week
+
+County
+
+Age group
+
+Outputs:
+
+Weekly syndrome counts
+
+Weekly incidence rates per 100,000
+
+4. Surveillance Signal Detection
+For each syndrome:
+
+Rolling 4‑week baseline
+
+Percent change
+
+Signal flag if ≥ 50% increase and baseline > 0
+
+5. SQL Parity
+All indicators are reproduced using analytic SQL with window functions.
+
+6. Visualization
+Generates a CDC‑style weekly ILI trend plot.
+
+## How to Run the Pipeline
+From the project root:
+
+Code
+python src/generate_synthetic_data.py
+python src/classify_syndromes.py
+python src/weekly_aggregation.py
+python src/surveillance_signals.py
+python src/plot_surveillance_trends.py
+Or run the orchestrator:
+
+Code
+python src/run_pipeline.py
+# Skills Demonstrated
+Public health surveillance analytics
+
+Epidemiologic indicator development
+
+Python data engineering
+
+SQL analytic window functions
+
+Modular pipeline design
+
+Reproducible research practices
+
+Data visualization
+
+Documentation and technical communication
+
+## Future Enhancements
+RSV seasonality modeling
+
+CLI subtyping (COVID vs non‑COVID viral CLI)
+
+Age‑standardized incidence rates
+
+ED volume normalization
+
+Multi‑pathogen co‑circulation indicators
+
+Integration of lab‑confirmed results
+
+Z‑score or Bayesian signal detection
+
+## Limitations
+Synthetic data only
+
+Simplified ICD‑10 logic
+
+No real‑world seasonality
+
+No spatial smoothing
+
+No hospital‑level variation
 ---
 
 ## Final Product Workflow (508-Friendly)
@@ -115,92 +329,5 @@ This project demonstrates:
 
 The analytic emphasis is on **transparency, interpretability, and reproducibility**, consistent with federal public health surveillance practices.
 
----
 
-## Folder Structure
-
-```text
-ph_surveillance_analytics_smp/
-├── data/
-│   ├── ed_visits.csv
-│   ├── lab_results.csv
-│   └── population.csv
-│
-├── outputs/
-│   ├── weekly_syndrome_counts.csv
-│   ├── weekly_incidence_rates.csv
-│   ├── anomaly_flags.csv
-│   └── ili_weekly_trend.png
-│
-├── src/
-│   ├── generate_synthetic_data.py
-│   ├── classify_syndromes.py
-│   ├── weekly_aggregation.py
-│   ├── anomaly_detection.py
-│   ├── plot_surveillance_trends.py
-│   └── run_pipeline.py
-│
-├── sql/
-│   ├── syndrome_classification.sql
-│   ├── weekly_aggregation.sql
-│   └── incidence_and_anomaly.sql
-│
-├── docs/
-│   ├── portfolio_summary.md
-│   ├── assumptions.md
-│   ├── data_dictionary.md
-│   ├── limitations.md
-│   ├── technical_appendix.md
-│   └── future_enhancements.md
-│
-└── README.md
-``
-
-## Surveillance Pipeline Overview
-
-This pipeline illustrates the transformation of synthetic ED visit data into weekly surveillance indicators, anomaly signals, and epidemiologic visualizations through a modular, orchestrated workflow.
-
-┌──────────────────────────────┐
-│ generate_synthetic_data.py   │
-│ - create synthetic ED visits │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ data/ed_visits.csv           │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ classify_syndromes.py        │
-│ - ILI / CLI / RSV flags      │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ weekly_aggregation.py        │
-│ - weekly counts              │
-│ - incidence rates            │
-└──────────────┬───────────────┘
-               │
-               ▼
-┌──────────────────────────────┐
-│ anomaly_detection.py         │
-│ - rolling baselines          │
-│ - anomaly flags              │
-└──────────────┬───────────────┘
-               │
-     ┌─────────┴─────────┐
-     ▼                   ▼
-┌───────────────┐  ┌────────────────────┐
-│ anomaly_flags │  │ plot_surveillance  │
-│ .csv          │  │ _trends.py          │
-└───────────────┘  │ - time series plot  │
-                   └──────────┬─────────┘
-                              │
-                              ▼
-                   ┌────────────────────┐
-                   │ outputs/ili_weekly │
-                   │ _trend.png         │
-                   └────────────────────┘
 ``
