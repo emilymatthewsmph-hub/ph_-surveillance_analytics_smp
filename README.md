@@ -327,7 +327,3 @@ This project demonstrates:
 - Epidemiologic time‑series visualization for surveillance trend monitoring
 - Parallel implementation of core logic in Python and SQL
 
-The analytic emphasis is on **transparency, interpretability, and reproducibility**, consistent with federal public health surveillance practices.
-
-
-``
